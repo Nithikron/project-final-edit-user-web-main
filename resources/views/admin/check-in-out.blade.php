@@ -102,10 +102,17 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block font-medium mb-2">เลือกห้อง</label>
-                                <select name="room_id" class="w-full border rounded-lg px-4 py-2" required>
+                                <select name="room_id" id="checkinRoomSelect" class="w-full border rounded-lg px-4 py-2" required>
                                     <option value="">-- เลือกห้องพัก --</option>
                                     @foreach ($bookableRooms as $room)
-                                        <option value="{{ $room->id }}">
+                                        @php
+                                            $latestBooking = $room->bookings->first();
+                                            $guestName = $latestBooking ? $latestBooking->customer_name : '';
+                                            $guestPhone = $latestBooking ? $latestBooking->customer_phone : '';
+                                        @endphp
+                                        <option value="{{ $room->id }}" 
+                                            data-guest-name="{{ $guestName }}"
+                                            data-guest-phone="{{ $guestPhone }}">
                                             ห้อง {{ $room->name_room }} ({{ $room->price }} บาท/วัน)
                                         </option>
                                     @endforeach
@@ -113,7 +120,7 @@
                             </div>
                             <div>
                                 <label class="block font-medium mb-2">ชื่อผู้เข้าพัก</label>
-                                <input type="text" name="tenant_name" class="w-full border rounded-lg px-4 py-2"
+                                <input type="text" name="tenant_name" id="checkinTenantName" class="w-full border rounded-lg px-4 py-2"
                                     required>
                             </div>
                         </div>
@@ -145,30 +152,44 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('admin.checkout.store') }}" method="POST">
-                        @csrf
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block font-medium mb-2">เลือกห้อง (ห้องที่มีผู้พัก)</label>
-                                <select name="room_id" class="w-full border rounded-lg px-4 py-2" required>
-                                    <option value="">-- เลือกห้องพัก --</option>
-                                    @foreach ($occupiedRooms as $room)
-                                        <option value="{{ $room->id }}">
-                                            ห้อง {{ $room->name_room }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block font-medium mb-2">ชื่อผู้เข้าพัก</label>
-                                <input type="text" name="tenant_name" class="w-full border rounded-lg px-4 py-2"
-                                    required>
-                            </div>
+                    @if (count($occupiedRooms) === 0)
+                        <div class="bg-yellow-100 text-yellow-800 p-4 rounded mb-4 border border-yellow-300">
+                            <p class="font-medium">ยังไม่มีห้องที่มีผู้เข้าพักอยู่</p>
+                            <p class="text-sm">กรุณาทำการเช็คอินก่อน เพื่อให้สามารถทำการเช็คเอาท์ได้</p>
                         </div>
-                        <button type="submit" class="mt-4 bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-700">
-                            เช็คเอาท์
-                        </button>
-                    </form>
+                    @endif
+
+                    @if (count($occupiedRooms) > 0)
+                        <form action="{{ route('admin.checkout.store') }}" method="POST">
+                            @csrf
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block font-medium mb-2">เลือกห้อง (ห้องที่มีผู้พัก)</label>
+                                    <select name="room_id" id="checkoutRoomSelect" class="w-full border rounded-lg px-4 py-2" required>
+                                        <option value="">-- เลือกห้องพัก --</option>
+                                        @foreach ($occupiedRooms as $room)
+                                            @php
+                                                $latestBooking = $room->bookings->first();
+                                                $guestName = $latestBooking ? $latestBooking->customer_name : '';
+                                            @endphp
+                                            <option value="{{ $room->id }}" 
+                                                data-guest-name="{{ $guestName }}">
+                                                ห้อง {{ $room->name_room }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block font-medium mb-2">ชื่อผู้เข้าพัก</label>
+                                    <input type="text" name="tenant_name" id="checkoutTenantName" class="w-full border rounded-lg px-4 py-2"
+                                        required>
+                                </div>
+                            </div>
+                            <button type="submit" class="mt-4 bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-700">
+                                เช็คเอาท์
+                            </button>
+                        </form>
+                    @endif
                 </div>
             </div>
 
@@ -266,6 +287,40 @@
         // Initialize - show first tab
         document.addEventListener('DOMContentLoaded', function() {
             switchTab('reserve');
+
+            // Add event listener for check-in room select
+            const checkinRoomSelect = document.getElementById('checkinRoomSelect');
+            const checkinTenantName = document.getElementById('checkinTenantName');
+            
+            if (checkinRoomSelect) {
+                checkinRoomSelect.addEventListener('change', function() {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const guestName = selectedOption.getAttribute('data-guest-name');
+                    
+                    if (guestName) {
+                        checkinTenantName.value = guestName;
+                    } else {
+                        checkinTenantName.value = '';
+                    }
+                });
+            }
+
+            // Add event listener for check-out room select
+            const checkoutRoomSelect = document.getElementById('checkoutRoomSelect');
+            const checkoutTenantName = document.getElementById('checkoutTenantName');
+            
+            if (checkoutRoomSelect) {
+                checkoutRoomSelect.addEventListener('change', function() {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const guestName = selectedOption.getAttribute('data-guest-name');
+                    
+                    if (guestName) {
+                        checkoutTenantName.value = guestName;
+                    } else {
+                        checkoutTenantName.value = '';
+                    }
+                });
+            }
         });
     </script>
 @endsection

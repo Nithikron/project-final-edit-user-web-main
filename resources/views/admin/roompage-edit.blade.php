@@ -51,10 +51,10 @@
                 <label class="block font-medium mb-1">สิ่งอำนวยความสะดวก</label>
                 <select name="facility" class="w-full border rounded-lg px-4 py-2" required>
                     <option value="">-- เลือก --</option>
-                    <option value="พัดลม" {{ old('facility', $room->facility) == 'พัดลม' ? 'selected' : '' }}>
+                    <option value="พัดลม" {{ old('facility', $room->facility[0] ?? '') == 'พัดลม' ? 'selected' : '' }}>
                         ห้องพัดลม
                     </option>
-                    <option value="แอร์" {{ old('facility', $room->facility) == 'แอร์' ? 'selected' : '' }}>
+                    <option value="แอร์" {{ old('facility', $room->facility[0] ?? '') == 'แอร์' ? 'selected' : '' }}>
                         ห้องแอร์
                     </option>
                 </select>

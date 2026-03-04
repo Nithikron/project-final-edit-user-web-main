@@ -47,7 +47,7 @@
                         <div class="text-sm mt-1">
                             {{ $room->status == 'available' ? 'ว่าง' : ($room->status == 'occupied' ? 'ไม่ว่าง' : 'จอง') }}
                         </div>
-                        <div class="text-xs mt-1">ห้อง : {{ $room->type}} {{ $room->facility}}</div>
+                        <div class="text-xs mt-1">ห้อง : {{ $room->type}} {{ is_array($room->facility) ? implode(', ', $room->facility) : $room->facility }}</div>
                     </div>
                 @endforeach
             </div>

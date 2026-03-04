@@ -35,7 +35,7 @@
                 @foreach ($rooms as $room)
                     <option value="{{ $room->id }}">
                         ห้อง {{ $room->name_room }}
-                        ({{ $room->facility }} | {{ $room->price }} บาท/วัน)
+                        ({{ is_array($room->facility) ? implode(', ', $room->facility) : $room->facility }} | {{ $room->price }} บาท/วัน)
                     </option>
                 @endforeach
             </select>

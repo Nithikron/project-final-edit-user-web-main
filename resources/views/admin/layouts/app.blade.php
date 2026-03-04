@@ -38,13 +38,13 @@
 
     <nav class="bg-white shadow mb-6">
         <div class="container mx-auto px-6 py-3 flex gap-4">
-            <a href="/" class="text-blue-600 hover:underline">Dashboard</a>
+            <a href="/admin" class="text-blue-600 hover:underline">Dashboard</a>
             {{-- <a class="nav-link {{ request()->is('/') ? 'active': '' }}" href="/">Dashboard</a> --}}
-            <a href="/roompages" class="text-gray-600 hover:underline">จัดการห้องพัก</a>
-            <a href="/booking" class="text-gray-600 hover:underline">จัดการผู้เข้าพัก</a>
-            <a href="/check-in-out" class="text-gray-600 hover:underline">จอง/เช็คอิน/เช็คเอาท์</a>
-            <a href="/payment" class="text-gray-600 hover:underline">บันทึกการชำระเงิน</a>
-            <a href="/report" class="text-gray-600 hover:underline">รายงาน</a>
+            <a href="/admin/roompages" class="text-gray-600 hover:underline">จัดการห้องพัก</a>
+            <a href="/admin/booking" class="text-gray-600 hover:underline">จัดการผู้เข้าพัก</a>
+            <a href="/admin/check-in-out" class="text-gray-600 hover:underline">จอง/เช็คอิน/เช็คเอาท์</a>
+            <a href="/admin/payment" class="text-gray-600 hover:underline">บันทึกการชำระเงิน</a>
+            <a href="/admin/report" class="text-gray-600 hover:underline">รายงาน</a>
         </div>
     </nav>
 

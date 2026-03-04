@@ -18,17 +18,37 @@ class CheckInOutController extends Controller
 {
     public function index()
     {
-        $rooms = Rooms::all();
+        // จอง: แสดงห้องว่างเท่านั้น
+        $availableRooms = Rooms::where('status', Rooms::STATUS_AVAILABLE)->get();
+        
+        // เช็คอิน: แสดงห้องว่างและห้องที่ถูกจองเข้ามา โดยรวมข้อมูลการจอง
+        $bookableRooms = Rooms::whereIn('status', [Rooms::STATUS_AVAILABLE, Rooms::STATUS_RESERVED])
+            ->with(['bookings' => function($query) {
+                $query->where('type', 'reserve')->latest('id')->limit(1);
+            }])
+            ->get();
+        
+        // เช็คเอาท์: แสดงห้องที่มีสถานะอยู่ โดยรวมข้อมูลการเช็คอิน
+        $occupiedRooms = Rooms::where('status', Rooms::STATUS_OCCUPIED)
+            ->with(['bookings' => function($query) {
+                $query->where('type', 'checkin')->latest('id')->limit(1);
+            }])
+            ->get();
+        
         $bookings = Booking::orderBy('id', 'desc')->get();
 
-        return view('admin.check-in-out', compact('rooms', 'bookings'));
+        return view('admin.check-in-out', compact('availableRooms', 'bookableRooms', 'occupiedRooms', 'bookings'));
     }
 
     public function showCheckout()
     {
-        $rooms = Rooms::where('status', Rooms::STATUS_OCCUPIED)->get();
+        $occupiedRooms = Rooms::where('status', Rooms::STATUS_OCCUPIED)
+            ->with(['bookings' => function($query) {
+                $query->where('type', 'checkin')->latest('id')->limit(1);
+            }])
+            ->get();
 
-        return view('admin.check-out', compact('rooms'));
+        return view('admin.check-out', compact('occupiedRooms'));
     }
 
     public function store(Request $request)
@@ -49,6 +69,13 @@ class CheckInOutController extends Controller
 
         Booking::create([
             'room_id' => $request->room_id,
+            'customer_name' => $request->tenant_name,
+            'customer_phone' => '',
+            'customer_email' => '',
+            'check_in_date' => now()->toDateString(),
+            'check_out_date' => now()->addDay()->toDateString(),
+            'total_price' => Rooms::find($request->room_id)->price,
+            'status' => 'confirmed',
             'tenant_name' => $request->tenant_name,
             'type' => 'checkin',
             'notes' => $request->notes ?? null,

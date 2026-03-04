@@ -154,7 +154,7 @@
                     select.value = tenant.room_id;
                 }
 
-                document.getElementById('editTenantForm').action = '/booking/' + tenant.id;
+                document.getElementById('editTenantForm').action = '/admin/booking/' + tenant.id;
 
                 document.getElementById('editTenantModal').classList.remove('hidden');
             }

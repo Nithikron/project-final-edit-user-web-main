@@ -31,7 +31,7 @@ class RoompagesController extends Controller
         Rooms::create([
             'name_room' => $request->name_room,
             'type' => $request->type,
-            'facility' => $request->facility,
+            'facility' => [$request->facility],
             'price' => $request->price,
             'status' => 'available',
         ]);
@@ -60,7 +60,7 @@ class RoompagesController extends Controller
         $room->update([
             'name_room' => $request->name_room,
             'type' => $request->type,
-            'facility' => $request->facility,
+            'facility' => [$request->facility],
             'price' => $request->price,
         ]);
 

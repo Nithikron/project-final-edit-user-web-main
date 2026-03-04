@@ -34,9 +34,16 @@ class ReserveController extends Controller
         // ✅ บันทึกการจอง
         Booking::create([
             'room_id'     => $request->room_id,
+            'customer_name' => $request->tenant_name,
+            'customer_phone' => '',
+            'customer_email' => '',
+            'check_in_date' => now()->toDateString(),
+            'check_out_date' => now()->addDay()->toDateString(),
+            'total_price' => $room->price,
+            'status' => 'pending',
             'tenant_name' => $request->tenant_name,
-            'type'        => 'reserve',   // เพิ่มประเภทให้รู้ว่าเป็นการ "จอง"
-            'date'        => now(),       // เก็บวันที่ไว้ดูย้อนหลัง
+            'type'        => 'reserve',
+            'date'        => now(),
         ]);
 
         // ✅ เปลี่ยนสถานะห้องเป็น "ถูกจอง"

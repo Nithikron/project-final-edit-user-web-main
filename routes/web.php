@@ -32,6 +32,12 @@ Route::prefix('rooms')->group(function () {
 });
 
 Route::prefix('booking')->group(function () {
+    Route::get('/', function () {
+        if (auth()->check() && auth()->user()->is_admin) {
+            return redirect('/admin/booking');
+        }
+        return redirect('/booking/history');
+    })->name('booking.index');
     Route::get('/create/{room}', [BookingController::class, 'create'])->name('booking.create');
     Route::post('/', [BookingController::class, 'store'])->name('booking.store');
     Route::get('/history', [BookingController::class, 'history'])->name('booking.history');
@@ -68,6 +74,7 @@ Route::prefix('admin')->middleware('auth.admin')->group(function () {
     // Routes เก่า (สำรองไว้ก่อน)
     Route::get('/roompages', [RoompagesController::class, 'index'])->name('admin.roompages');
     Route::get('/booking', [BookingpagesController::class, 'index'])->name('admin.booking');
+    Route::put('/booking/{tenant}', [BookingpagesController::class, 'update'])->name('admin.booking.update');
     Route::get('/payment', [PaymentpagesController::class, 'index'])->name('admin.payment');
     Route::get('/report', [ReportpagesController::class, 'index'])->name('admin.report');
 

@@ -16,6 +16,10 @@ class Rooms extends Model
         'status',
     ];
 
+    protected $casts = [
+        'facility' => 'array',
+    ];
+
     // status constants (แนะนำมาก)
     const STATUS_AVAILABLE = 'available';
 
@@ -25,6 +29,6 @@ class Rooms extends Model
 
     public function bookings()
     {
-        return $this->hasMany(Booking::class);
+        return $this->hasMany(Booking::class, 'room_id', 'id');
     }
 }
