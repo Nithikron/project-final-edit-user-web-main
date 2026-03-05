@@ -217,9 +217,11 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     @if(request()->routeIs('home'))
-                        <li class="nav-item me-2 d-flex align-items-center">
-                            <a href="{{ route('booking.history') }}" class="btn btn-sm btn-outline-light">ค้นหาประวัติการจอง</a>
-                        </li>
+                        @if(session()->has('user_id'))
+                            <li class="nav-item me-2 d-flex align-items-center">
+                                <a href="{{ route('booking.history') }}" class="btn btn-sm btn-outline-light">ประวัติ</a>
+                            </li>
+                        @endif
                     @endif
                     @if(!session()->has('user_id'))
                         <li class="nav-item me-2 d-flex align-items-center">

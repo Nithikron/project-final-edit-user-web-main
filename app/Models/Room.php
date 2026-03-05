@@ -46,7 +46,7 @@ class Room extends Model
 
     public function scopeAvailable($query)
     {
-        return $query->where('status', 'available');
+        return $query->whereIn('status', ['available', 'reserved']);
     }
 
     public function scopeByType($query, $type)
@@ -75,6 +75,7 @@ class Room extends Model
     {
         return !$this->bookings()
             ->whereIn('status', ['pending', 'confirmed'])
+            ->whereNotIn('status', ['completed', 'cancelled']) // exclude completed and cancelled bookings
             ->where(function ($q) use ($checkIn, $checkOut) {
                 // ตรวจสอบว่า booking overlaps กับ check-in/check-out dates
                 // booking อยู่ถ้า: check_in_date < checkout request AND check_out_date > checkin request

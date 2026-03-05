@@ -16,6 +16,13 @@
                     <form method="POST" action="{{ route('register.submit') }}" onsubmit="return validateForm()">
                         @csrf
                         
+                        @if (session('info'))
+                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                <i class="bi bi-info-circle me-2"></i>{{ session('info') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        @endif
+                        
                         <div class="row">
                             <!-- Name -->
                             <div class="col-md-6 mb-3">

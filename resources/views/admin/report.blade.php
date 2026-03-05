@@ -103,7 +103,7 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{ $item->booking?->check_in_date->format('d/m/Y H:i') ?? '-' }}
+                                    {{ $item->created_at->format('d/m/Y H:i') ?? '-' }}
                                 </td>
                             </tr>
                         @empty

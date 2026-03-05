@@ -31,6 +31,14 @@
                     <h5 class="mb-0"><i class="bi bi-person-plus me-2"></i>ข้อมูลการจอง</h5>
                 </div>
                 <div class="card-body">
+                    <!-- แสดงข้อความสำเร็จ -->
+                    @if (session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+                    
                     <!-- ฟอร์มสำหรับกรอกข้อมูลการจอง -->
                     <form action="{{ route('booking.store', [], false) }}" method="POST">
                         @csrf

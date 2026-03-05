@@ -11,10 +11,7 @@ class RoomController extends Controller
 {
     public function index()
     {
-        $currentUser = User::find(session('user_id'));
-        $historyDefaultKeyword = $currentUser?->username ?? $currentUser?->name;
-
-        return view('rooms.index', compact('historyDefaultKeyword'));
+        return view('rooms.index');
     }
 
     public function byType(Request $request, $type)
@@ -22,16 +19,14 @@ class RoomController extends Controller
         $checkIn = $request->query('check_in');
         $checkOut = $request->query('check_out');
         
-        $query = Room::available()->byType($type);
+        $query = Room::where('status', 'available')->byType($type);
         
         if (!$checkIn || !$checkOut) {
             $checkIn = Carbon::today()->toDateString();
             $checkOut = Carbon::tomorrow()->toDateString();
         }
 
-        $rooms = $query->get()->filter(function ($room) use ($checkIn, $checkOut) {
-                return $room->isAvailableForDates($checkIn, $checkOut);
-        });
+        $rooms = $query->get();
         
         return view('rooms.type', compact('rooms', 'type', 'checkIn', 'checkOut'));
     }

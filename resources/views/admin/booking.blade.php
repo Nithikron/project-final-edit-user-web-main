@@ -33,8 +33,8 @@
                                 <tr>
                                     <td class="px-6 py-2">{{ $tenant->tenant_name }}</td>
                                     <td class="px-6 py-2">
-                                        {{-- เบอร์โทรมาจากผู้ใช้ที่มีชื่อเดียวกับ tenant_name --}}
-                                        {{ $tenant->user?->phone ?? '-' }}
+                                        {{-- แสดงเบอร์โทรจาก customer_phone หรือ user phone หรือ matched user phone --}}
+                                        {{ $tenant->customer_phone ?: ($tenant->user?->phone ?: ($tenant->matched_user?->phone ?? '-')) }}
                                     </td>
                                     <td class="px-6 py-2">
                                         ห้อง {{ $tenant->room?->name_room ?? $tenant->room_id }}
@@ -55,7 +55,7 @@
                                         <!-- ปุ่มจัดการ (เช่น แก้ไข / เช็คเอาท์) -->
                                         <a href="#" class="text-blue-600 hover:underline edit-button"
                                             data-id="{{ $tenant->id }}" data-tenant_name="{{ $tenant->tenant_name }}"
-                                            data-phone="{{ $tenant->user?->phone }}" data-room_id="{{ $tenant->room_id }}"
+                                            data-phone="{{ $tenant->customer_phone ?: ($tenant->user?->phone ?: ($tenant->matched_user?->phone ?? '')) }}" data-room_id="{{ $tenant->room_id }}"
                                             data-room_name="{{ $tenant->room?->name_room }}"
                                             data-date="{{ $tenant->date }}" data-type="{{ $tenant->type }}">แก้ไข</a>
                                     </td>

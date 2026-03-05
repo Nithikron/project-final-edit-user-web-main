@@ -17,6 +17,17 @@ class BookingpagesController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+        // สำหรับแต่ละ tenant หา user ที่ match tenant_name เพื่อแสดง phone
+        $tenants = $tenants->map(function ($tenant) {
+            if (!$tenant->user && $tenant->tenant_name) {
+                $user = \App\Models\User::where('name', $tenant->tenant_name)->first();
+                if ($user) {
+                    $tenant->matched_user = $user; // add matched user for display
+                }
+            }
+            return $tenant;
+        });
+
         // ดึงเฉพาะห้องที่สถานะว่างเท่านั้น
         $rooms = Rooms::where('status', Rooms::STATUS_AVAILABLE)->get();
 
@@ -39,11 +50,17 @@ class BookingpagesController extends Controller
 
         $request->validate($rules);
 
-        // update booking record (doesn't store phone)
+        // update booking record (store phone in customer_phone field)
         $oldName = $tenant->tenant_name;
-        $tenant->update($request->only(['tenant_name','room_id','date']));
+        $tenant->update($request->only(['tenant_name','room_id','date', 'phone']));
 
-        // if phone provided, update matching user record (use old name in case the tenant name changed)
+        // update customer_phone field in booking record
+        if ($request->filled('phone')) {
+            $tenant->customer_phone = $request->phone;
+            $tenant->save();
+        }
+
+        // if phone provided, also update matching user record (use old name in case the tenant name changed)
         if ($request->filled('phone')) {
             $user = \App\Models\User::where('name', $oldName)->first();
             if ($user) {

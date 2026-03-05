@@ -82,7 +82,26 @@ class AuthController extends Controller
             'role' => 'user', // ค่าเริ่มต้นคือ user
         ]);
 
-        return redirect()->route('login.form')->with('success', 'สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ');
+        // เข้าสู่ระบบอัตโนมัติหลังสมัครเสร็จ
+        Session::put('user_id', $user->id);
+        Session::put('user_name', $user->name);
+        Session::put('user_role', $user->role);
+
+        // ตรวจสอบว่ามีการจองห้องที่ต้องการหรือไม่
+        if (Session::has('intended_room_id')) {
+            $roomId = Session::get('intended_room_id');
+            $checkIn = Session::get('intended_check_in');
+            $checkOut = Session::get('intended_check_out');
+            
+            // ล้าง session
+            Session::forget(['intended_room_id', 'intended_check_in', 'intended_check_out']);
+            
+            // redirect ไปหน้าจองห้อง
+            return redirect()->route('booking.create', $roomId)
+                ->with('success', 'สมัครสมาชิกสำเร็จ! กรุณากรอกข้อมูลการจองห้อง');
+        }
+
+        return redirect()->route('home')->with('success', 'สมัครสมาชิกสำเร็จ! ยินดีต้อนรับ '.$user->name);
     }
 
     // ออกจากระบบ

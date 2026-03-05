@@ -56,6 +56,7 @@ class CheckInOutController extends Controller
         $request->validate([
             'room_id' => 'required|exists:rooms,id',
             'tenant_name' => 'required',
+            'phone' => 'nullable|string|max:20',
         ]);
 
         // ❌ กันเช็คอินซ้ำ
@@ -70,7 +71,7 @@ class CheckInOutController extends Controller
         Booking::create([
             'room_id' => $request->room_id,
             'customer_name' => $request->tenant_name,
-            'customer_phone' => '',
+            'customer_phone' => $request->phone ?? '',
             'customer_email' => '',
             'check_in_date' => now()->toDateString(),
             'check_out_date' => now()->addDay()->toDateString(),
@@ -111,9 +112,18 @@ class CheckInOutController extends Controller
         return back()->with('error', 'ชื่อผู้เข้าพักไม่ตรงกับข้อมูลที่เช็คอินไว้');
     }
 
+    // update any overlapping online bookings to completed
+    Booking::where('room_id', $request->room_id)
+        ->where('status', 'confirmed')
+        ->whereNull('type')
+        ->where('check_in_date', '<=', now()->toDateString())
+        ->where('check_out_date', '>=', now()->toDateString())
+        ->update(['status' => 'cancelled']);
+
     // ✅ อัปเดตเป็น checkout
     $booking->update([
         'type'  => 'checkout',
+        'status' => 'cancelled', // update status to cancelled
         'notes' => 'เช็คเอาท์แล้ว',
     ]);
 

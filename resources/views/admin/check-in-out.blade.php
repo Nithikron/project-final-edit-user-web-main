@@ -123,6 +123,11 @@
                                 <input type="text" name="tenant_name" id="checkinTenantName" class="w-full border rounded-lg px-4 py-2"
                                     required>
                             </div>
+                            <div>
+                                <label class="block font-medium mb-2">เบอร์โทรศัพท์</label>
+                                <input type="text" name="phone" id="checkinTenantPhone" class="w-full border rounded-lg px-4 py-2"
+                                    placeholder="08xxxxxxxx">
+                            </div>
                         </div>
                         <div class="mt-4">
                             <label class="block font-medium mb-2">หมายเหตุ</label>

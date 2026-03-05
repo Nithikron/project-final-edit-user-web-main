@@ -23,6 +23,16 @@ class BookingController extends Controller
     
     public function create(Request $request, Room $room)
     {
+        // ตรวจสอบว่าผู้ใช้ล็อคอินหรือไม่
+        if (!auth()->check() && !session('user_id')) {
+            // เก็บข้อมูลห้องที่ต้องการจองไว้ใน session
+            session(['intended_room_id' => $room->id]);
+            session(['intended_check_in' => $request->check_in]);
+            session(['intended_check_out' => $request->check_out]);
+            
+            return redirect()->route('register.form')->with('info', 'กรุณาสมัครสมาชิกก่อนทำการจองห้อง');
+        }
+
         $currentUser = auth()->user() ?? User::find(session('user_id'));
 
         $month = $request->month ?? now()->month;
@@ -204,26 +214,20 @@ class BookingController extends Controller
 
     public function history(Request $request)
     {
-        $keyword = trim((string) $request->query('keyword', ''));
-        $hasKeyword = $keyword !== '';
-
-        $bookings = collect();
-
-        if ($hasKeyword) {
-            $bookings = Booking::with(['room', 'user'])
-                ->where(function ($query) use ($keyword) {
-                    $query->whereHas('user', function ($userQuery) use ($keyword) {
-                        $userQuery->where('username', 'like', "%{$keyword}%");
-                    })->orWhere('customer_name', 'like', "%{$keyword}%");
-                })
-                ->orderByDesc('created_at')
-                ->get();
+        $currentUser = auth()->user() ?? User::find(session('user_id'));
+        
+        if (!$currentUser) {
+            return redirect()->route('login.form')->with('error', 'กรุณาเข้าสู่ระบบเพื่อดูประวัติการจอง');
         }
+
+        $bookings = Booking::with(['room', 'user'])
+            ->where('user_id', $currentUser->id)
+            ->orderByDesc('created_at')
+            ->get();
 
         return view('booking.history', [
             'bookings' => $bookings,
-            'keyword' => $keyword,
-            'hasKeyword' => $hasKeyword,
+            'currentUser' => $currentUser,
         ]);
     }
 

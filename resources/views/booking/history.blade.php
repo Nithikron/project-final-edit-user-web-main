@@ -15,40 +15,20 @@
             @endif
 
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3 class="mb-0"><i class="bi bi-clock-history me-2"></i>ผลการค้นหาประวัติการจอง</h3>
+                <h3 class="mb-0"><i class="bi bi-clock-history me-2"></i>ประวัติการจองของ {{ $currentUser->name }}</h3>
                 <a href="{{ route('home') }}" class="btn btn-outline-secondary btn-sm">
                     <i class="bi bi-arrow-left me-1"></i>กลับหน้าแรก
                 </a>
             </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <form action="{{ route('booking.history') }}" method="GET" class="row g-2 align-items-center">
-                        <div class="col-md-9">
-                            <label for="keyword" class="form-label mb-1">ค้นหาด้วย username หรือชื่อ-นามสกุล</label>
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="keyword"
-                                name="keyword"
-                                value="{{ $keyword }}"
-                                required
-                            >
-                        </div>
-                        <div class="col-md-3 pt-md-4">
-                            <button type="submit" class="btn btn-primary w-100">ค้นหา</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            @if(!$hasKeyword)
-                <div class="alert alert-info">
-                    กรุณากรอก <strong>username</strong> หรือ <strong>ชื่อ-นามสกุล</strong> เพื่อค้นหาประวัติการจอง
-                </div>
-            @elseif($bookings->isEmpty())
-                <div class="alert alert-warning">
-                    ไม่พบประวัติการจองสำหรับคำค้นหา <strong>{{ $keyword }}</strong>
+            @if($bookings->isEmpty())
+                <div class="alert alert-info text-center">
+                    <i class="bi bi-info-circle display-4 text-info mb-3"></i>
+                    <h4>ยังไม่เคยพัก</h4>
+                    <p class="mb-0">คุณยังไม่เคยทำการจองหรือเข้าพักที่โรงแรมของเรา</p>
+                    <a href="{{ route('home') }}" class="btn btn-primary mt-3">
+                        <i class="bi bi-house-door me-1"></i>เลือกห้องพัก
+                    </a>
                 </div>
             @else
                 <div class="alert alert-success">
@@ -97,7 +77,6 @@
                                             <form action="{{ route('booking.destroy-from-history', $booking) }}" method="POST" onsubmit="return confirm('ยืนยันการยกเลิกการจองนี้?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <input type="hidden" name="keyword" value="{{ $keyword }}">
                                                 <button type="submit" class="btn btn-sm btn-outline-danger">ยกเลิกการจอง</button>
                                             </form>
                                         </td>
