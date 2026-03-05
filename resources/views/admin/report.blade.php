@@ -91,13 +91,13 @@
                                     {{ number_format($item->booking?->total_price ?? $item->amount, 2) }} บาท
                                 </td>
                                 <td class="px-6 py-4">
-                                    @if ($item->status === 'จ่าย')
+                                    @if (strtolower($item->status) === 'paid')
                                         <span
                                             class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium">
                                             ชำระแล้ว
                                         </span>
                                     @else
-                                        <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-medium">
+                                        <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-medium">
                                             ค้างชำระ
                                         </span>
                                     @endif

@@ -29,7 +29,7 @@
 
             <div class="mb-4">
                 <label class="block font-medium mb-1">เลขห้อง</label>
-                <input type="text" name="name_room" value="{{ old('number') }}" class="w-full border rounded-lg px-4 py-2"
+                <input type="text" name="name_room" value="{{ old('name_room') }}" class="w-full border rounded-lg px-4 py-2"
                     placeholder="ใส่เลขห้อง" required>
             </div>
 
@@ -37,24 +37,17 @@
                 <label class="block font-medium mb-1">ประเภทห้อง</label>
                 <select name="type" class="w-full border rounded-lg px-4 py-2" required>
                     <option value="">-- เลือกประเภทห้อง --</option>
-                    <option value="เดี่ยว" {{ old('type') == 'ห้องเดี่ยว' ? 'selected' : '' }}>
-                        ห้องเดี่ยว
+                    <option value="air_single" {{ old('type') == 'air_single' ? 'selected' : '' }}>
+                        แอร์เตียงเดี่ยว
                     </option>
-                    <option value="คู่" {{ old('type') == 'ห้องคู่' ? 'selected' : '' }}>
-                        ห้องคู่
+                    <option value="air_double" {{ old('type') == 'air_double' ? 'selected' : '' }}>
+                        แอร์เตียงคู่
                     </option>
-                </select>
-            </div>
-
-            <div class="mb-4">
-                <label class="block font-medium mb-1">ประเภทห้อง</label>
-                <select name="facility" class="w-full border rounded-lg px-4 py-2" required>
-                    <option value="">-- เลือกประเภทห้อง --</option>
-                    <option value="พัดลม" {{ old('type') == 'ห้องพัดลม' ? 'selected' : '' }}>
-                        ห้องพัดลม
+                    <option value="fan_single" {{ old('type') == 'fan_single' ? 'selected' : '' }}>
+                        พัดลมเตียงเดี่ยว
                     </option>
-                    <option value="แอร์" {{ old('type') == 'ห้องแอร์' ? 'selected' : '' }}>
-                        ห้องแอร์
+                    <option value="fan_double" {{ old('type') == 'fan_double' ? 'selected' : '' }}>
+                        พัดลมเตียงคู่
                     </option>
                 </select>
             </div>
@@ -70,7 +63,7 @@
                     บันทึก
                 </button>
 
-                <a href="/roompages" class="flex-1 bg-gray-300 text-center py-2 rounded-lg hover:bg-gray-400">
+                <a href="/admin/roompages" class="flex-1 bg-gray-300 text-center py-2 rounded-lg hover:bg-gray-400">
                     ยกเลิก
                 </a>
             </div>

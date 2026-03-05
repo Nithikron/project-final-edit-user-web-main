@@ -10,7 +10,10 @@ class CheckpagesController extends Controller
 {
     public function index()
     {
-        $bookings = Booking::orderBy('id', 'desc')->paginate(10);
+        // แสดงการจองทั้งหมด รวมถึงการจองจากลูกค้า
+        $bookings = Booking::with(['room', 'user'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
         
         // สำหรับจองห้องพัก - แสดงแค่ห้องที่ว่าง
         $availableRooms = Rooms::where('status', Rooms::STATUS_AVAILABLE)->get();

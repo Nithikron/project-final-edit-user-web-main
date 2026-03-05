@@ -104,6 +104,10 @@ class BookingController extends Controller
             'status' => 'pending'
         ]);
 
+        // อัปเดตสถานะห้องเป็น 'reserved' เมื่อมีการจอง
+        \App\Models\Rooms::where('id', $request->room_id)
+            ->update(['status' => 'reserved']);
+
         return redirect()->route('booking.payment', $booking);
     }
 
@@ -146,6 +150,10 @@ class BookingController extends Controller
                 'payment_confirmed_at' => now(),
                 'status' => 'confirmed'
             ]);
+
+            // อัปเดตสถานะห้องเป็น 'reserved' (ยืนยันการจอง)
+            \App\Models\Rooms::where('id', $booking->room_id)
+                ->update(['status' => 'reserved']);
             
             // สร้างข้อมูลการชำระเงินไปยัง admin/payments
             $this->createPaymentRecord($booking);
@@ -161,6 +169,14 @@ class BookingController extends Controller
     {
         // สร้างข้อมูลการชำระเงินในตาราง payments
         \App\Models\Payment::create([
+            'room_id' => $booking->room_id,
+            'user_id' => $booking->user_id,
+            'tenant_name' => $booking->customer_name,
+            'type' => 'other',
+            'description' => 'ค่าห้องพัก - จองออนไลน์',
+            'amount' => $booking->total_price,
+            'date' => now()->toDateString(),
+            'status' => 'paid',
             'booking_id' => $booking->id,
             'customer_name' => $booking->customer_name,
             'customer_email' => $booking->customer_email,
@@ -169,20 +185,20 @@ class BookingController extends Controller
             'room_type' => $booking->room->type,
             'check_in_date' => $booking->check_in_date,
             'check_out_date' => $booking->check_out_date,
-            'amount' => $booking->total_price,
+            'payment_qr' => $booking->payment_qr,
+            'payment_confirmed_at' => $booking->payment_confirmed_at,
+            'remark' => 'ชำระเงินผ่าน QR Code',
             'payment_method' => 'bank_transfer',
             'payment_status' => 'paid',
             'payment_date' => now(),
             'slip_image' => $booking->payment_qr,
-            'payment_qr' => $booking->payment_qr,
-            'payment_confirmed_at' => $booking->payment_confirmed_at,
-            'status' => 'confirmed',
             'notes' => 'ชำระเงินผ่าน QR Code'
         ]);
     }
 
     public function receipt(Booking $booking)
     {
+        $booking->load('room');
         return view('booking.receipt', compact('booking'));
     }
 

@@ -204,6 +204,7 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ประเภท</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ห้อง</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ผู้เข้าพัก</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">สถานะ</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">รายละเอียด</th>
                             </tr>
                         </thead>
@@ -216,31 +217,59 @@
 
                                     <td class="px-6 py-2">
                                         @if ($b->type === 'reserve')
-                                            <span class="text-blue-600 font-bold">จอง</span>
+                                            <span class="text-blue-600 font-bold">จอง (แอดมิน)</span>
                                         @elseif ($b->type === 'checkin')
                                             <span class="text-green-600 font-bold">เช็คอิน</span>
                                         @elseif ($b->type === 'checkout')
                                             <span class="text-red-600 font-bold">เช็คเอาท์</span>
+                                        @elseif ($b->type === 'booking')
+                                            <span class="text-purple-600 font-bold">จอง (ลูกค้า)</span>
                                         @else
-                                            <span class="text-gray-400">ไม่ทราบสถานะ</span>
+                                            <span class="text-orange-600 font-bold">จองออนไลน์</span>
                                         @endif
                                     </td>
 
                                     <td class="px-6 py-2">
-                                        ห้อง {{ $b->room_id ?? '-' }}
+                                        @if($b->room)
+                                            ห้อง {{ $b->room->name_room }}
+                                        @else
+                                            ห้อง {{ $b->room_id }}
+                                        @endif
                                     </td>
 
                                     <td class="px-6 py-2">
-                                        {{ $b->tenant_name ?? '-' }}
+                                        {{ $b->tenant_name ?? $b->customer_name ?? '-' }}
                                     </td>
 
                                     <td class="px-6 py-2">
-                                        {{ $b->notes ?? '-' }}
+                                        @if ($b->status === 'pending')
+                                            <span class="text-yellow-600 font-bold">รอชำระเงิน</span>
+                                        @elseif ($b->status === 'confirmed')
+                                            <span class="text-green-600 font-bold">ยืนยันแล้ว</span>
+                                        @elseif ($b->status === 'cancelled')
+                                            <span class="text-red-600 font-bold">ยกเลิก</span>
+                                        @else
+                                            <span class="text-gray-400">{{ $b->status }}</span>
+                                        @endif
+                                    </td>
+
+                                    <td class="px-6 py-2">
+                                        @if($b->type)
+                                            {{ $b->notes ?? '-' }}
+                                        @else
+                                            <!-- Customer booking details -->
+                                            <div class="text-sm">
+                                                <div>📧 {{ $b->customer_email }}</div>
+                                                <div>📞 {{ $b->customer_phone }}</div>
+                                                <div>📅 {{ $b->check_in_date->format('d/m/Y') }} - {{ $b->check_out_date->format('d/m/Y') }}</div>
+                                                <div>💰 {{ number_format($b->total_price) }} บาท</div>
+                                            </div>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="text-center py-6 text-gray-400">
+                                    <td colspan="6" class="text-center py-6 text-gray-400">
                                         ยังไม่มีประวัติการจอง / เช็คอิน / เช็คเอาท์
                                     </td>
                                 </tr>

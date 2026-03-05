@@ -38,10 +38,10 @@
                 <label class="block font-medium mb-1">ประเภทห้อง</label>
                 <select name="type" class="w-full border rounded-lg px-4 py-2" required>
                     <option value="">-- เลือกประเภทห้อง --</option>
-                    <option value="เดี่ยว" {{ old('type', $room->type) == 'เดี่ยว' ? 'selected' : '' }}>
+                    <option value="เดี่ยว" {{ old('type', $room->form_type ?? $room->type) == 'เดี่ยว' ? 'selected' : '' }}>
                         ห้องเดี่ยว
                     </option>
-                    <option value="คู่" {{ old('type', $room->type) == 'คู่' ? 'selected' : '' }}>
+                    <option value="คู่" {{ old('type', $room->form_type ?? $room->type) == 'คู่' ? 'selected' : '' }}>
                         ห้องคู่
                     </option>
                 </select>
@@ -51,10 +51,10 @@
                 <label class="block font-medium mb-1">สิ่งอำนวยความสะดวก</label>
                 <select name="facility" class="w-full border rounded-lg px-4 py-2" required>
                     <option value="">-- เลือก --</option>
-                    <option value="พัดลม" {{ old('facility', $room->facility[0] ?? '') == 'พัดลม' ? 'selected' : '' }}>
+                    <option value="พัดลม" {{ old('facility', $room->form_facility ?? ($room->facility[0] ?? '')) == 'พัดลม' ? 'selected' : '' }}>
                         ห้องพัดลม
                     </option>
-                    <option value="แอร์" {{ old('facility', $room->facility[0] ?? '') == 'แอร์' ? 'selected' : '' }}>
+                    <option value="แอร์" {{ old('facility', $room->form_facility ?? ($room->facility[0] ?? '')) == 'แอร์' ? 'selected' : '' }}>
                         ห้องแอร์
                     </option>
                 </select>
@@ -71,7 +71,7 @@
                     บันทึกการแก้ไข
                 </button>
 
-                <a href="/roompages" class="flex-1 bg-gray-300 text-center py-2 rounded-lg hover:bg-gray-400">
+                <a href="/admin/roompages" class="flex-1 bg-gray-300 text-center py-2 rounded-lg hover:bg-gray-400">
                     ยกเลิก
                 </a>
             </div>

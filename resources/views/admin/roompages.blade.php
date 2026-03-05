@@ -23,7 +23,7 @@
                             <h3 class="text-2xl font-bold text-gray-800">
                                 ห้อง {{ $room->name_room }}
                             </h3>
-                            <p class="text-gray-600">{{ $room->type }}</p>
+                            <p class="text-gray-600">{{ $room->type_label }}</p>
                         </div>
 
                         <span

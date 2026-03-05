@@ -10,6 +10,8 @@ class Room extends Model
 {
     use HasFactory;
 
+    protected $table = 'rooms';
+
     protected $fillable = [
         'name_room',
         'type',
@@ -49,7 +51,24 @@ class Room extends Model
 
     public function scopeByType($query, $type)
     {
-        return $query->where('type', $type);
+        // primary match is the literal type (e.g. 'air_single')
+        return $query->where(function ($q) use ($type) {
+            $q->where('type', $type);
+
+            // if the incoming type looks like the code we use on the
+            // public site, also look for legacy entries where we stored
+            // just the thai word and used the facility field for air/fan.
+            if (str_contains($type, '_')) {
+                [$fac, $t] = explode('_', $type, 2);
+                $thaiType = $t === 'single' ? 'เดี่ยว' : 'คู่';
+                $thaiFacility = $fac === 'air' ? 'แอร์' : 'พัดลม';
+
+                $q->orWhere(function ($q2) use ($thaiType, $thaiFacility) {
+                    $q2->where('type', $thaiType)
+                       ->whereJsonContains('facility', $thaiFacility);
+                });
+            }
+        });
     }
 
     public function isAvailableForDates($checkIn, $checkOut): bool
@@ -57,12 +76,10 @@ class Room extends Model
         return !$this->bookings()
             ->whereIn('status', ['pending', 'confirmed'])
             ->where(function ($q) use ($checkIn, $checkOut) {
-                $q->whereBetween('check_in_date', [$checkIn, $checkOut])
-                  ->orWhereBetween('check_out_date', [$checkIn, $checkOut])
-                  ->orWhere(function ($q) use ($checkIn, $checkOut) {
-                      $q->where('check_in_date', '<=', $checkIn)
-                        ->where('check_out_date', '>=', $checkOut);
-                  });
+                // ตรวจสอบว่า booking overlaps กับ check-in/check-out dates
+                // booking อยู่ถ้า: check_in_date < checkout request AND check_out_date > checkin request
+                $q->where('check_in_date', '<', $checkOut)
+                  ->where('check_out_date', '>', $checkIn);
             })
             ->exists();
     }

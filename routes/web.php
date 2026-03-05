@@ -31,6 +31,36 @@ Route::prefix('rooms')->group(function () {
     Route::get('/{room}', [RoomController::class, 'show'])->name('rooms.show');
 });
 
+// Debug route - check room data
+if (app()->environment('local')) {
+    Route::get('/debug/rooms', function () {
+        $rooms = \App\Models\Room::all();
+        return response()->json([
+            'total' => $rooms->count(),
+            'rooms' => $rooms->map(fn($r) => [
+                'id' => $r->id,
+                'name_room' => $r->name_room,
+                'type' => $r->type,
+                'facility' => $r->facility,
+                'status' => $r->status,
+            ]),
+            'air_single_test' => \App\Models\Room::where('type', 'air_single')->count(),
+            'legacy_test' => \App\Models\Room::where('type', 'เดี่ยว')->whereJsonContains('facility', 'แอร์')->count(),
+        ]);
+    });
+
+    Route::get('/debug/add-sample-room', function () {
+        \App\Models\Room::create([
+            'name_room' => 'A110',
+            'type' => 'fan_double',
+            'facility' => ['พัดลม'],
+            'price' => 700,
+            'status' => 'available',
+        ]);
+        return response()->json(['message' => 'Room A110 added successfully', 'type' => 'fan_double']);
+    });
+}
+
 Route::prefix('booking')->group(function () {
     Route::get('/', function () {
         if (auth()->check() && auth()->user()->is_admin) {

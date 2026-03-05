@@ -22,7 +22,7 @@
             <div class="card room-card room-select-card h-100">
                 <div class="card-body text-center">
                     <i class="bi bi-wind display-1 text-primary mb-3"></i>
-                    <h5 class="card-title">แอร์เตียงเดี่ยว</h5>
+                    <h5 class="card-title">แอร์ เตียงเดี่ยว</h5>
                     <p class="card-text">ห้องพักปรับอากาศ พร้อมเตียงขนาดเดี่ยว</p>
                     <p class="text-primary fw-bold">500 บาท/คืน</p>
                     <a href="{{ route('rooms.type', 'air_single') }}" class="btn btn-primary-custom w-100">
@@ -36,7 +36,7 @@
             <div class="card room-card room-select-card h-100">
                 <div class="card-body text-center">
                     <i class="bi bi-wind display-1 text-info mb-3"></i>
-                    <h5 class="card-title">แอร์เตียงคู่</h5>
+                    <h5 class="card-title">แอร์ เตียงคู่</h5>
                     <p class="card-text">ห้องพักปรับอากาศ พร้อมเตียงขนาดคู่</p>
                     <p class="text-info fw-bold">900 บาท/คืน</p>
                     <a href="{{ route('rooms.type', 'air_double') }}" class="btn btn-primary-custom w-100">
@@ -50,7 +50,7 @@
             <div class="card room-card room-select-card h-100">
                 <div class="card-body text-center">
                     <i class="bi bi-fan display-1 text-success mb-3"></i>
-                    <h5 class="card-title">พัดลมเตียงเดี่ยว</h5>
+                    <h5 class="card-title">พัดลม เตียงเดี่ยว</h5>
                     <p class="card-text">ห้องพักพัดลม พร้อมเตียงขนาดเดี่ยว</p>
                     <p class="text-success fw-bold">400 บาท/คืน</p>
                     <a href="{{ route('rooms.type', 'fan_single') }}" class="btn btn-primary-custom w-100">
@@ -64,9 +64,9 @@
             <div class="card room-card room-select-card h-100">
                 <div class="card-body text-center">
                     <i class="bi bi-fan display-1 text-warning mb-3"></i>
-                    <h5 class="card-title">พัดลมเตียงคู่</h5>
+                    <h5 class="card-title">พัดลม เตียงคู่</h5>
                     <p class="card-text">ห้องพักพัดลม พร้อมเตียงขนาดคู่</p>
-                    <p class="text-warning fw-bold">800 บาท/คืน</p>
+                    <p class="text-warning fw-bold">700 บาท/คืน</p>
                     <a href="{{ route('rooms.type', 'fan_double') }}" class="btn btn-primary-custom w-100">
                         เลือกห้องนี้
                     </a>
