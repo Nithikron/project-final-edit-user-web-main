@@ -10,7 +10,7 @@
 
     <div class="container text-center position-relative" style="z-index: 2;">
         <div class="welcome-shadow-box d-inline-block">
-            <h1 class="display-4 fw-bold mb-3">ยินดีต้อนรับสู่ออมรีสอด</h1>
+            <h1 class="display-4 fw-bold mb-3">ยินดีต้อนรับสู่ออมรีสอร์ท</h1>
             <p class="lead mb-0">เลือกประเภทห้องที่ต้องการจองได้เลย</p>
         </div>
     </div>

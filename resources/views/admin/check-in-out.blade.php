@@ -62,6 +62,10 @@
                                 <input type="text" name="tenant_name" class="w-full border rounded-lg px-4 py-2"
                                     required>
                             </div>
+                             <div class="mt-4">
+                            <label class="block font-medium mb-2">หมายเหตุ</label>
+                            <textarea name="notes" class="w-full border rounded-lg px-4 py-2"></textarea>
+                        </div>
                         </div>
                         <button type="submit" class="mt-4 bg-green-600 text-white py-2 px-6 rounded-lg hover:bg-green-700">
                             จองห้องพัก
@@ -123,11 +127,11 @@
                                 <input type="text" name="tenant_name" id="checkinTenantName" class="w-full border rounded-lg px-4 py-2"
                                     required>
                             </div>
-                            <div>
+                            {{-- <div>
                                 <label class="block font-medium mb-2">เบอร์โทรศัพท์</label>
                                 <input type="text" name="phone" id="checkinTenantPhone" class="w-full border rounded-lg px-4 py-2"
                                     placeholder="08xxxxxxxx">
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="mt-4">
                             <label class="block font-medium mb-2">หมายเหตุ</label>

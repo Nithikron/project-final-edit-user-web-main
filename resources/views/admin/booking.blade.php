@@ -8,13 +8,13 @@
         <!-- Tenants Tab -->
 
         <div class="bg-white rounded-xl shadow-lg p-6">
-            <div class="flex justify-between items-center mb-6">
+            {{-- <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold text-gray-800">จัดการผู้เข้าพัก</h2>
                 <button onclick="showAddTenantModal()"
                     class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all">
                     ➕ เพิ่มผู้เข้าพัก
                 </button>
-            </div>
+            </div> --}}
             <div class="overflow-x-auto">
                 <table class="w-full" id="tenants-table">
                     <thead class="bg-gray-50">

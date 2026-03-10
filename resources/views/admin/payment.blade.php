@@ -16,14 +16,14 @@
         </div>
     @endif
 
-    <div class="bg-white rounded-xl shadow-lg p-6">
+    {{-- <div class="bg-white rounded-xl shadow-lg p-6">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-bold text-gray-800">บันทึกการชำระเงิน</h2>
             <button onclick="switchAddPaymentTab()"
                 class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all">
                 ➕ บันทึกชำระเงิน
             </button>
-        </div>
+        </div> --}}
 
         <!-- Add Payment Form (Hidden by default) -->
         <div id="addPaymentForm" class="mb-6 p-6 bg-purple-50 rounded-lg hidden">

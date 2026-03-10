@@ -5,7 +5,7 @@
 @section('content')
     <div id="content-reports" class="tab-content">
 
-        {{-- Summary Cards --}}
+        {{-- Summary Cards
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-6 text-white">
                 <h3 class="text-sm text-purple-100 mb-2">รายได้ทั้งหมด</h3>
@@ -38,26 +38,60 @@
                     {{ number_format($paymentTotal, 2) }} บาท
                 </p>
             </div>
-        </div>
+        </div> --}}
 
         {{-- Room Revenue Breakdown --}}
         <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
             <h3 class="text-xl font-bold mb-4 text-gray-800">รายละเอียดรายได้จากห้องพัก</h3>
+            {{-- Summary Cards --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-6 text-white">
+                <h3 class="text-sm text-purple-100 mb-2">รายได้ทั้งหมด</h3>
+                <p class="text-3xl font-bold">
+                    {{ number_format($total, 2) }} บาท
+                </p>
+                <p class="text-xs text-purple-100 mt-2">(ห้องพัก + การชำระเงิน)</p>
+            </div>
+
+            {{-- <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white">
+                <h3 class="text-sm text-blue-100 mb-2">รายได้จากห้องพัก</h3>
+                <p class="text-3xl font-bold">
+                    {{ number_format($roomRevenue, 2) }} บาท
+                </p>
+                <p class="text-xs text-blue-100 mt-2">(เช็คเอาท์: {{ number_format($checkoutRevenue, 2) }} | พักอยู่: {{ number_format($checkinRevenue, 2) }})</p>
+            </div> --}}
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            {{-- <div class="bg-green-50 rounded-xl shadow-lg p-6 border border-green-200">
+                <h3 class="text-sm text-gray-500 mb-2">ยอดที่ชำระแล้ว</h3>
+                <p class="text-2xl font-bold text-green-600">
+                    {{ number_format($paid, 2) }} บาท
+                </p>
+            </div> --}}
+
+            {{-- <div class="bg-yellow-50 rounded-xl shadow-lg p-6 border border-yellow-200">
+                <h3 class="text-sm text-gray-500 mb-2">การชำระเงินทั้งหมด</h3>
+                <p class="text-2xl font-bold text-yellow-600">
+                    {{ number_format($paymentTotal, 2) }} บาท
+                </p>
+            </div> --}}
+        </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Checked Out Revenue -->
-                <div class="border border-gray-200 rounded-lg p-4">
+                {{-- <div class="border border-gray-200 rounded-lg p-4">
                     <h4 class="font-semibold text-gray-700 mb-2">รายได้จากผู้เข้าพักที่เคลียร์ห้องแล้ว</h4>
                     <p class="text-2xl font-bold text-green-600">{{ number_format($checkoutRevenue, 2) }} บาท</p>
                     <p class="text-xs text-gray-500 mt-2">เงินจากผู้เข้าพักที่เช็คเอาท์แล้ว</p>
-                </div>
+                </div> --}}
                 
-                <!-- Current Occupancy Revenue -->
+                {{-- <!-- Current Occupancy Revenue -->
                 <div class="border border-gray-200 rounded-lg p-4">
                     <h4 class="font-semibold text-gray-700 mb-2">รายได้จากผู้เข้าพักในขณะนี้</h4>
                     <p class="text-2xl font-bold text-blue-600">{{ number_format($checkinRevenue, 2) }} บาท</p>
                     <p class="text-xs text-gray-500 mt-2">เงินจากห้องที่มีผู้พักอยู่</p>
-                </div>
+                </div> --}}
             </div>
         </div>
 
